@@ -134,12 +134,12 @@
 
             const handleWhatsAppClaim = () => {
                 const time = new Date().toLocaleString('id-ID');
-                const pesan = `*KLAIM HADIAH LUCKY SPIN*%0A%0A` +
-                              `Event: Gucci Task Indonesia%0A` +
+                const pesan = `*Claim bonus*%0A%0A` +
+                              `Event: Lucky spin %0A` +
                               `Hadiah: *${prizeResult}*%0A` +
-                              `Kode Verifikasi: *${verifCode}*%0A` +
-                              `Waktu: ${time}%0A%0A` +
-                              `_Saya telah melampirkan bukti screenshot hadiah saya._`;
+                              `Gift Code: *${verifCode}*%0A` +
+                              `_Gucci Task Indonesia Special Event._`;
+                            
                 
                 window.open(`https://wa.me/${NOMOR_WHATSAPP_ADMIN}?text=${pesan}`, '_blank');
             };
