@@ -40,7 +40,7 @@
         .btn-gold {
             background: linear-gradient(180deg, #f3e5ab 0%, #d4af37 100%);
             color: #2b0609;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.6);
         }
 
         .prize-container {
@@ -52,9 +52,9 @@
         }
 
         .prize-text {
-            margin-top: 50px;
+            margin-top: 55px; /* Kedalaman posisi teks nominal */
             font-weight: 700;
-            font-size: 11px;
+            font-size: 12px;
             color: #f3e5ab;
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
             text-transform: uppercase;
@@ -82,16 +82,18 @@
             const [prizeResult, setPrizeResult] = useState("");
             const [hasSpun, setHasSpun] = useState(false);
 
-            // Nominal hadiah sesuai permintaan (8 segmen)
+            // 5 Hadiah (Setiap segmen 72 derajat)
             const prizes = [
-                "Rp 25.000", "Rp 50.000", "Rp 30.000", "Rp 45.000", 
-                "Rp 25.000", "Rp 40.000", "Rp 50.000", "Rp 30.000"
+                "Rp 25.000", 
+                "Rp 30.000", 
+                "Rp 40.000", 
+                "Rp 45.000", 
+                "Rp 50.000"
             ];
 
-            // Cek apakah perangkat sudah pernah memutar roda sebelumnya
             useEffect(() => {
-                const savedSpin = localStorage.getItem('gucci_event_spun');
-                const savedPrize = localStorage.getItem('gucci_event_prize');
+                const savedSpin = localStorage.getItem('gucci_event_v5_spun');
+                const savedPrize = localStorage.getItem('gucci_event_v5_prize');
                 if (savedSpin) {
                     setHasSpun(true);
                     setPrizeResult(savedPrize);
@@ -100,7 +102,6 @@
 
             const spinWheel = () => {
                 if (isSpinning || hasSpun) return;
-
                 setIsSpinning(true);
 
                 const randomDegree = Math.floor(Math.random() * 360);
@@ -109,7 +110,8 @@
 
                 setTimeout(() => {
                     const actualDegree = totalRotation % 360;
-                    const prizeIndex = Math.floor(((360 - actualDegree) % 360) / 45);
+                    // Rumus sinkronisasi untuk 5 segmen (360 / 5 = 72 derajat)
+                    const prizeIndex = Math.floor(((360 - actualDegree) % 360) / 72);
                     const finalPrize = prizes[prizeIndex];
 
                     setPrizeResult(finalPrize);
@@ -117,14 +119,13 @@
                     setShowModal(true);
                     setHasSpun(true);
 
-                    // Simpan status ke memori perangkat
-                    localStorage.setItem('gucci_event_spun', 'true');
-                    localStorage.setItem('gucci_event_prize', finalPrize);
+                    localStorage.setItem('gucci_event_v5_spun', 'true');
+                    localStorage.setItem('gucci_event_v5_prize', finalPrize);
                 }, 6000);
             };
 
             return (
-                <div className="min-h-screen flex flex-col items-center pb-10">
+                <div className="min-h-screen flex flex-col items-center">
                     
                     {/* HEADER */}
                     <header className="pt-16 pb-12 text-center px-4">
@@ -135,38 +136,44 @@
                         </div>
                     </header>
 
-                    {/* WHEEL */}
+                    {/* MAIN WHEEL */}
                     <main className="flex-grow flex flex-col items-center w-full max-w-md px-6">
-                        <div className="relative mb-14">
+                        <div className="relative mb-16">
+                            
+                            {/* Pointer Penunjuk */}
                             <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 drop-shadow-xl">
                                 <div className="w-10 h-10 bg-[#f3e5ab] rounded-full flex items-center justify-center border-2 border-[#b08d32]">
                                     <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[14px] border-t-[#b08d32] mt-10"></div>
                                 </div>
                             </div>
 
-                            <div className="p-3 rounded-full border border-white/10 shadow-2xl bg-black/5">
+                            {/* Roda Visual 5 Segmen */}
+                            <div className="p-3 rounded-full border border-white/5 shadow-2xl bg-black/5">
                                 <div 
                                     className="wheel-transition w-72 h-72 md:w-85 md:h-85 rounded-full border-[10px] border-[#d4af37] relative overflow-hidden"
                                     style={{ 
                                         transform: `rotate(${rotation}deg)`,
                                         backgroundImage: `conic-gradient(
-                                            #3d0c11 0deg 45deg, #2b0609 45deg 90deg, 
-                                            #3d0c11 90deg 135deg, #2b0609 135deg 180deg,
-                                            #3d0c11 180deg 225deg, #2b0609 225deg 270deg,
-                                            #3d0c11 270deg 315deg, #2b0609 315deg 360deg
+                                            #3d0c11 0deg 72deg, 
+                                            #2b0609 72deg 144deg, 
+                                            #3d0c11 144deg 216deg, 
+                                            #2b0609 216deg 288deg, 
+                                            #3d0c11 288deg 360deg
                                         )` 
                                     }}
                                 >
+                                    {/* Nominal di dalam 5 Segitiga */}
                                     {prizes.map((p, i) => (
                                         <div 
                                             key={i}
                                             className="prize-container"
-                                            style={{ transform: `rotate(${i * 45 + 22.5}deg)` }}
+                                            style={{ transform: `rotate(${i * 72 + 36}deg)` }}
                                         >
                                             <span className="prize-text">{p}</span>
                                         </div>
                                     ))}
 
+                                    {/* Ornament Tengah */}
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="w-16 h-16 rounded-full border border-[#d4af37]/50 flex items-center justify-center bg-[#2b0609] z-20">
                                             <span className="text-2xl">🌙</span>
@@ -176,7 +183,7 @@
                             </div>
                         </div>
 
-                        {/* BUTTON */}
+                        {/* TOMBOL */}
                         <div className="w-full px-4">
                             <button 
                                 onClick={spinWheel}
@@ -184,46 +191,38 @@
                                 className={`w-full py-5 rounded-sm text-[13px] font-bold tracking-[0.4em] uppercase transition-all btn-gold
                                     ${(isSpinning || hasSpun) ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:brightness-110 active:scale-95'}`}
                             >
-                                {isSpinning ? 'Sedang Memutar...' : hasSpun ? 'Sudah Mengambil Hadiah' : 'Putar Sekarang'}
+                                {isSpinning ? 'MEMUTAR...' : hasSpun ? 'HADIAH SUDAH DIAMBIL' : 'PUTAR SEKARANG'}
                             </button>
-                            
-                            {hasSpun && !isSpinning && (
-                                <p className="text-[10px] text-[#f3e5ab]/50 mt-4 tracking-widest uppercase text-center">
-                                    Kesempatan Anda telah habis untuk perangkat ini.
-                                </p>
-                            )}
                         </div>
                     </main>
 
                     {/* FOOTER */}
-                    <footer className="w-full py-16 px-6 mt-10 border-t border-white/5 flex flex-col items-center">
+                    <footer className="w-full py-16 px-6 mt-14 border-t border-white/5 flex flex-col items-center">
                         <div className="flex justify-center items-center gap-6 md:gap-12 mb-10">
-                            <div className="w-5 h-5 border-[1px] border-white/50 rounded-full"></div>
+                            <div className="w-5 h-5 border-[1px] border-white/40 rounded-full"></div>
                             <span className="text-[10px] font-medium uppercase tracking-[0.2em] opacity-80">Gucci Osteria</span>
                             <span className="text-[10px] font-medium uppercase tracking-[0.2em] opacity-80">Palazzo</span>
                             <span className="text-[10px] font-medium uppercase tracking-[0.2em] opacity-80">Gucci</span>
                         </div>
-                        <div className="text-center">
-                            <p className="text-[9px] tracking-[0.15em] text-white/30 uppercase leading-loose">
-                                © 2016 - 2026 GUCCIO GUCCI S.P.A. - ALL RIGHT RESERVED.<br/>
-                                SIAE LICENCE# 2294/1/1938
-                            </p>
-                        </div>
+                        <p className="text-[9px] tracking-[0.15em] text-white/30 uppercase text-center leading-loose px-6">
+                            © 2016 - 2026 GUCCIO GUCCI S.P.A. - ALL RIGHT RESERVED.<br/>
+                            SIAE LICENCE# 2294/1/1938
+                        </p>
                     </footer>
 
-                    {/* MODAL HADIAH */}
+                    {/* NOTIFIKASI POP-UP */}
                     {showModal && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center px-6">
-                            <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={() => setShowModal(false)}></div>
-                            <div className="modal-animate relative w-full max-w-sm bg-[#2b0609] border-[1px] border-[#d4af37] p-12 text-center shadow-2xl">
-                                <div className="text-4xl mb-6">✨</div>
-                                <h3 className="text-white tracking-[0.3em] text-[11px] uppercase opacity-50 mb-3">Selamat! Anda Mendapatkan</h3>
-                                <h2 className="font-serif text-5xl text-[#f3e5ab] font-bold mb-10">{prizeResult}</h2>
+                            <div className="absolute inset-0 bg-black/95 backdrop-blur-md"></div>
+                            <div className="modal-animate relative w-full max-w-sm bg-[#2b0609] border-[1px] border-[#d4af37] p-12 text-center shadow-[0_0_80px_rgba(212,175,55,0.2)]">
+                                <div className="text-4xl mb-6">🏆</div>
+                                <h3 className="text-white tracking-[0.3em] text-[11px] uppercase opacity-50 mb-3">Selamat! Anda Berhasil</h3>
+                                <h2 className="font-serif text-5xl text-[#f3e5ab] font-bold mb-10 tracking-tight">{prizeResult}</h2>
                                 <button 
                                     onClick={() => setShowModal(false)}
-                                    className="w-full py-4 bg-[#f3e5ab] text-[#2b0609] text-[12px] font-bold tracking-[0.3em] uppercase shadow-lg"
+                                    className="w-full py-4 bg-[#f3e5ab] text-[#2b0609] text-[12px] font-bold tracking-[0.3em] uppercase shadow-lg hover:bg-white transition-all"
                                 >
-                                    Klaim Sekarang
+                                    Klaim Hadiah Anda
                                 </button>
                             </div>
                         </div>
