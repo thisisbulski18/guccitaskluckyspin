@@ -3,210 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ramadhan Kareem - Exclusive Gift</title>
+    <title>Gucci - Exclusive Event</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Playfair Display & Montserrat -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-
-    <!-- React & Babel -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Google Fonts: Serif untuk gaya mewah -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
         body {
+            background-color: #2b0609; /* Warna Maroon Gelap sesuai gambar */
+            color: white;
             font-family: 'Montserrat', sans-serif;
-            background-color: #011a13;
-            color: #f3e5ab;
             margin: 0;
-            overflow-x: hidden;
         }
 
-        .font-serif { font-family: 'Playfair Display', serif; }
-
-        /* Background Pattern Berbintang */
-        .bg-pattern {
-            background-image: radial-gradient(#d4af37 0.5px, transparent 0.5px);
-            background-size: 40px 40px;
-            opacity: 0.1;
+        .font-serif {
+            font-family: 'Playfair Display', serif;
         }
 
-        /* Animasi Roda */
-        .wheel-transition {
-            transition: transform 6s cubic-bezier(0.2, 0, 0.1, 1);
+        .gucci-logo {
+            letter-spacing: 0.3em;
+            font-weight: 400;
         }
 
-        /* Efek Shimmer Emas pada Tombol */
-        .btn-gold {
-            background: linear-gradient(135deg, #c5a059 0%, #f3e5ab 50%, #c5a059 100%);
-            background-size: 200% auto;
-            animation: shine 3s linear infinite;
+        .timer-box {
+            background-color: #3d0c11; /* Warna coklat maroon kotak */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        @keyframes shine {
-            to { background-position: 200% center; }
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Ornamen Lampion Animasi */
-        .lantern {
-            animation: swing 3s ease-in-out infinite;
-            transform-origin: top center;
+        .footer-link {
+            letter-spacing: 0.2em;
+            font-size: 10px;
+            transition: opacity 0.3s;
         }
 
-        @keyframes swing {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
+        .footer-link:hover {
+            opacity: 0.7;
         }
     </style>
 </head>
-<body>
-    <div id="root"></div>
+<body className="flex flex-col min-h-screen">
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <div className="flex-grow flex flex-col items-center justify-center px-6 py-12">
+        
+        <!-- HEADER: Nama GUCCI -->
+        <div className="mb-12 text-center">
+            <h1 className="gucci-logo font-serif text-6xl md:text-8xl text-white">GUCCI</h1>
+        </div>
 
-        const App = () => {
-            const [rotation, setRotation] = useState(0);
-            const [isSpinning, setIsSpinning] = useState(false);
-            const [showResult, setShowResult] = useState(false);
-            const [winningPrize, setWinningPrize] = useState("");
+        <!-- TIMER SECTION -->
+        <div className="grid grid-cols-2 gap-4 w-full max-w-lg mb-10">
+            <!-- Mulai -->
+            <div className="timer-box rounded-sm p-8 text-center">
+                <p className="text-[10px] tracking-[0.3em] uppercase opacity-60 mb-6">Mulai</p>
+                <p className="font-serif text-4xl md:text-5xl">12:56</p>
+            </div>
+            <!-- Selesai -->
+            <div className="timer-box rounded-sm p-8 text-center">
+                <p className="text-[10px] tracking-[0.3em] uppercase opacity-60 mb-6">Selesai</p>
+                <p className="font-serif text-4xl md:text-5xl">13:01</p>
+            </div>
+        </div>
 
-            // Daftar Hadiah (8 Segmen)
-            const prizes = [
-                "Rp 25.000", "Rp 50.000", "Rp 30.000", "Rp 75.000", 
-                "Rp 25.000", "Rp 40.000", "Rp 60.000", "Rp 35.000"
-            ];
+        <!-- INSTRUCTION TEXT -->
+        <div className="text-center space-y-2 max-w-md">
+            <div className="w-12 h-[1px] bg-white/20 mx-auto mb-6"></div>
+            <p className="text-[10px] tracking-[0.15em] leading-loose opacity-80 uppercase">
+                Sistem sedang memproses profit di dalam akun anda
+            </p>
+            <p className="text-[10px] tracking-[0.15em] leading-loose opacity-80 uppercase">
+                Mohon menunggu hingga waktu yang ditentukan sistem berakhir
+            </p>
+        </div>
+    </div>
 
-            const spinWheel = () => {
-                if (isSpinning) return;
-
-                setIsSpinning(true);
-                setShowResult(false);
-
-                // Hitung Putaran (Minimal 5 putaran penuh)
-                const randomDegree = Math.floor(Math.random() * 360);
-                const totalRotation = rotation + (360 * 8) + randomDegree;
-                
-                setRotation(totalRotation);
-
-                // Tentukan Hadiah Berdasarkan Derajat Akhir
-                // (360 / 8 segmen = 45 derajat per segmen)
-                setTimeout(() => {
-                    const actualDegree = totalRotation % 360;
-                    const prizeIndex = Math.floor(((360 - actualDegree) % 360) / 45);
-                    setWinningPrize(prizes[prizeIndex]);
-                    setIsSpinning(false);
-                    setShowResult(true);
-                }, 6000);
-            };
-
-            return (
-                <div className="min-h-screen relative flex flex-col items-center justify-center p-6">
-                    {/* Background Layer */}
-                    <div className="absolute inset-0 bg-pattern"></div>
-                    
-                    {/* Lanterns Decorative */}
-                    <div className="absolute top-0 left-10 hidden md:block lantern">
-                        <div className="w-[1px] h-32 bg-[#d4af37] mx-auto"></div>
-                        <div className="w-8 h-12 bg-[#d4af37] rounded-full blur-[2px] opacity-50"></div>
-                    </div>
-
-                    {/* Main Container */}
-                    <div className="relative z-10 w-full max-w-lg">
-                        
-                        {/* Header Elegant */}
-                        <div className="text-center mb-10">
-                            <div className="flex items-center justify-center gap-4 mb-4">
-                                <div className="h-[1px] w-12 bg-[#d4af37]"></div>
-                                <span className="text-[10px] tracking-[0.5em] uppercase font-light">The Exclusive Event</span>
-                                <div className="h-[1px] w-12 bg-[#d4af37]"></div>
-                            </div>
-                            <h1 className="font-serif text-5xl md:text-6xl text-[#d4af37] tracking-tighter mb-2">RAMADHAN</h1>
-                            <p className="font-light text-[11px] tracking-[0.3em] opacity-80 uppercase">Blessings & Prosperity</p>
-                        </div>
-
-                        {/* Wheel UI */}
-                        <div className="relative flex justify-center mb-12">
-                            {/* Pointer Luxury */}
-                            <div className="absolute -top-6 z-30 drop-shadow-2xl">
-                                <div className="w-8 h-8 bg-[#f3e5ab] rounded-full flex items-center justify-center border-2 border-[#c5a059]">
-                                    <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[12px] border-t-[#c5a059] mt-8"></div>
-                                </div>
-                            </div>
-
-                            {/* The Wheel */}
-                            <div className="relative p-4 rounded-full border-[1px] border-[#d4af37]/30 shadow-[0_0_100px_rgba(212,175,55,0.15)]">
-                                <div 
-                                    className="wheel-transition w-72 h-72 md:w-85 md:h-85 rounded-full border-[12px] border-[#c5a059] relative overflow-hidden shadow-2xl"
-                                    style={{ 
-                                        transform: `rotate(${rotation}deg)`,
-                                        backgroundImage: `conic-gradient(
-                                            #022c22 0deg 45deg, #033f32 45deg 90deg, 
-                                            #022c22 90deg 135deg, #033f32 135deg 180deg,
-                                            #022c22 180deg 225deg, #033f32 225deg 270deg,
-                                            #022c22 270deg 315deg, #033f32 315deg 360deg
-                                        )` 
-                                    }}
-                                >
-                                    {/* Labels Hadiah */}
-                                    {prizes.map((p, i) => (
-                                        <div 
-                                            key={i}
-                                            className="absolute w-full h-full text-center pt-8 font-semibold text-[10px] text-[#f3e5ab]"
-                                            style={{ transform: `rotate(${i * 45 + 22.5}deg)` }}
-                                        >
-                                            <span className="inline-block bg-[#011a13]/50 px-2 py-1 rounded border border-[#d4af37]/20">
-                                                {p}
-                                            </span>
-                                        </div>
-                                    ))}
-
-                                    {/* Center Ornament */}
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="w-16 h-16 bg-[#011a13] rounded-full border-[3px] border-[#d4af37] flex flex-col items-center justify-center shadow-2xl z-20">
-                                            <span className="text-[8px] font-bold tracking-widest text-[#d4af37]">GIFT</span>
-                                            <span className="text-xl">🌙</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* CTA Button */}
-                        <div className="px-10">
-                            <button 
-                                onClick={spinWheel}
-                                disabled={isSpinning}
-                                className={`w-full py-5 rounded-sm text-[12px] font-bold tracking-[0.4em] transition-all duration-500 btn-gold text-black uppercase shadow-2xl
-                                    ${isSpinning ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:scale-[1.02] active:scale-95'}`}
-                            >
-                                {isSpinning ? 'Sedang Mengundi...' : 'Ambil Berkah'}
-                            </button>
-                        </div>
-
-                        {/* Result Popup */}
-                        {showResult && (
-                            <div className="mt-8 text-center animate-fade-in">
-                                <p className="font-serif italic text-[#d4af37] text-lg mb-1">Selamat!</p>
-                                <p className="text-white text-sm font-light tracking-[0.1em]">Anda Berhasil Mendapatkan Hadiah Senilai</p>
-                                <h3 className="text-3xl font-bold text-[#f3e5ab] mt-2 drop-shadow-lg">{winningPrize}</h3>
-                            </div>
-                        )}
-
-                        {/* Footer Minimalist */}
-                        <div className="mt-20 text-center">
-                            <p className="text-[#d4af37]/40 text-[9px] tracking-[0.5em] uppercase">Ramadhan 1447 H • Private Invitation</p>
-                        </div>
-                    </div>
+    <!-- FOOTER: Sesuai Gambar -->
+    <footer className="w-full py-12 px-6">
+        <div className="max-w-4xl mx-auto">
+            <!-- Navigasi Footer -->
+            <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 mb-8">
+                <div className="opacity-80">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
                 </div>
-            );
-        };
+                <a href="#" className="footer-link uppercase">Gucci Osteria</a>
+                <a href="#" className="footer-link uppercase">Palazzo</a>
+                <a href="#" className="footer-link uppercase">Gucci</a>
+            </div>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+            <!-- Copyright & Lisensi -->
+            <div className="text-center">
+                <p className="text-[9px] tracking-[0.1em] text-white/40 uppercase leading-relaxed">
+                    © 2016 - 2026 GUCCIO GUCCI S.P.A. - ALL RIGHT RESERVED. SIAE LICENCE# 2294/1/1938
+                </p>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
