@@ -18,7 +18,7 @@
 
     <style>
         body {
-            background-color: #2b0609;
+            background-color: #2b0609; /* Maroon Gelap */
             color: white;
             font-family: 'Montserrat', sans-serif;
             margin: 0;
@@ -27,22 +27,27 @@
 
         .font-serif { font-family: 'Playfair Display', serif; }
 
+        /* Warna Emas Elegant (Metallic Gradient) */
         .text-gold {
             background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
+        /* Animasi Roda */
         .wheel-transition {
-            transition: transform 6s cubic-bezier(0.15, 0, 0.15, 1);
+            transition: transform 7s cubic-bezier(0.15, 0, 0.1, 1);
         }
 
+        /* Tombol Emas Sesuai Gambar */
         .btn-gold {
             background: linear-gradient(180deg, #f3e5ab 0%, #d4af37 100%);
             color: #2b0609;
             box-shadow: 0 4px 25px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
+        /* Posisi Teks Hadiah dalam 6 Segmen (60 derajat) */
         .prize-container {
             position: absolute;
             width: 100%;
@@ -52,19 +57,20 @@
         }
 
         .prize-text {
-            margin-top: 55px; /* Kedalaman posisi teks nominal */
+            margin-top: 55px; /* Kedalaman posisi teks di segitiga */
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px;
             color: #f3e5ab;
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
             text-transform: uppercase;
         }
 
+        /* Pop-up Animation */
         .modal-animate {
-            animation: zoomIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-        @keyframes zoomIn {
-            from { transform: scale(0.5); opacity: 0; }
+        @keyframes modalPop {
+            from { transform: scale(0.6); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
     </style>
@@ -82,21 +88,23 @@
             const [prizeResult, setPrizeResult] = useState("");
             const [hasSpun, setHasSpun] = useState(false);
 
-            // 5 Hadiah (Setiap segmen 72 derajat)
+            // 6 Nominal Hadiah Sesuai Permintaan
             const prizes = [
                 "Rp 25.000", 
                 "Rp 30.000", 
+                "Rp 35.000", 
                 "Rp 40.000", 
                 "Rp 45.000", 
                 "Rp 50.000"
             ];
 
+            // Proteksi 1x Putar per Perangkat
             useEffect(() => {
-                const savedSpin = localStorage.getItem('gucci_event_v5_spun');
-                const savedPrize = localStorage.getItem('gucci_event_v5_prize');
-                if (savedSpin) {
+                const checkSpin = localStorage.getItem('gucci_event_final_spun');
+                const checkPrize = localStorage.getItem('gucci_event_final_prize');
+                if (checkSpin) {
                     setHasSpun(true);
-                    setPrizeResult(savedPrize);
+                    setPrizeResult(checkPrize);
                 }
             }, []);
 
@@ -110,8 +118,8 @@
 
                 setTimeout(() => {
                     const actualDegree = totalRotation % 360;
-                    // Rumus sinkronisasi untuk 5 segmen (360 / 5 = 72 derajat)
-                    const prizeIndex = Math.floor(((360 - actualDegree) % 360) / 72);
+                    // Sinkronisasi untuk 6 segmen (360 / 6 = 60 derajat)
+                    const prizeIndex = Math.floor(((360 - actualDegree) % 360) / 60);
                     const finalPrize = prizes[prizeIndex];
 
                     setPrizeResult(finalPrize);
@@ -119,63 +127,65 @@
                     setShowModal(true);
                     setHasSpun(true);
 
-                    localStorage.setItem('gucci_event_v5_spun', 'true');
-                    localStorage.setItem('gucci_event_v5_prize', finalPrize);
-                }, 6000);
+                    // Simpan data di perangkat
+                    localStorage.setItem('gucci_event_final_spun', 'true');
+                    localStorage.setItem('gucci_event_final_prize', finalPrize);
+                }, 7000);
             };
 
             return (
                 <div className="min-h-screen flex flex-col items-center">
                     
-                    {/* HEADER */}
+                    {/* HEADER SECTION */}
                     <header className="pt-16 pb-12 text-center px-4">
                         <h1 className="font-serif text-5xl md:text-7xl text-white tracking-[0.3em] mb-4 uppercase leading-none">GUCCI</h1>
                         <div className="flex flex-col items-center">
                             <h2 className="text-gold text-lg md:text-2xl tracking-[0.4em] font-semibold uppercase">Task Indonesia</h2>
-                            <p className="text-gold text-[10px] md:text-xs tracking-[0.6em] font-light uppercase mt-1 opacity-90">Special Event</p>
+                            <p className="text-gold text-[11px] md:text-sm tracking-[0.6em] font-light uppercase mt-2 opacity-90">Special Event</p>
                         </div>
                     </header>
 
-                    {/* MAIN WHEEL */}
+                    {/* MAIN CONTENT (WHEEL) */}
                     <main className="flex-grow flex flex-col items-center w-full max-w-md px-6">
                         <div className="relative mb-16">
                             
-                            {/* Pointer Penunjuk */}
+                            {/* Pointer (Pin) */}
                             <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 drop-shadow-xl">
                                 <div className="w-10 h-10 bg-[#f3e5ab] rounded-full flex items-center justify-center border-2 border-[#b08d32]">
                                     <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[14px] border-t-[#b08d32] mt-10"></div>
                                 </div>
                             </div>
 
-                            {/* Roda Visual 5 Segmen */}
+                            {/* Lingkaran Roda (6 Segmen) */}
                             <div className="p-3 rounded-full border border-white/5 shadow-2xl bg-black/5">
                                 <div 
                                     className="wheel-transition w-72 h-72 md:w-85 md:h-85 rounded-full border-[10px] border-[#d4af37] relative overflow-hidden"
                                     style={{ 
                                         transform: `rotate(${rotation}deg)`,
                                         backgroundImage: `conic-gradient(
-                                            #3d0c11 0deg 72deg, 
-                                            #2b0609 72deg 144deg, 
-                                            #3d0c11 144deg 216deg, 
-                                            #2b0609 216deg 288deg, 
-                                            #3d0c11 288deg 360deg
+                                            #3d0c11 0deg 60deg, 
+                                            #2b0609 60deg 120deg, 
+                                            #3d0c11 120deg 180deg, 
+                                            #2b0609 180deg 240deg, 
+                                            #3d0c11 240deg 300deg, 
+                                            #2b0609 300deg 360deg
                                         )` 
                                     }}
                                 >
-                                    {/* Nominal di dalam 5 Segitiga */}
+                                    {/* Nominal Hadiah di dalam Segitiga */}
                                     {prizes.map((p, i) => (
                                         <div 
                                             key={i}
                                             className="prize-container"
-                                            style={{ transform: `rotate(${i * 72 + 36}deg)` }}
+                                            style={{ transform: `rotate(${i * 60 + 30}deg)` }}
                                         >
                                             <span className="prize-text">{p}</span>
                                         </div>
                                     ))}
 
-                                    {/* Ornament Tengah */}
+                                    {/* Ornament Tengah (Moon) */}
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="w-16 h-16 rounded-full border border-[#d4af37]/50 flex items-center justify-center bg-[#2b0609] z-20">
+                                        <div className="w-16 h-16 rounded-full border border-[#d4af37]/40 flex items-center justify-center bg-[#2b0609] z-20 shadow-inner">
                                             <span className="text-2xl">🌙</span>
                                         </div>
                                     </div>
@@ -183,38 +193,43 @@
                             </div>
                         </div>
 
-                        {/* TOMBOL */}
-                        <div className="w-full px-4">
+                        {/* TOMBOL AKSI */}
+                        <div className="w-full px-4 text-center">
                             <button 
                                 onClick={spinWheel}
                                 disabled={isSpinning || hasSpun}
                                 className={`w-full py-5 rounded-sm text-[13px] font-bold tracking-[0.4em] uppercase transition-all btn-gold
-                                    ${(isSpinning || hasSpun) ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:brightness-110 active:scale-95'}`}
+                                    ${(isSpinning || hasSpun) ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:scale-[1.02] active:scale-95'}`}
                             >
-                                {isSpinning ? 'MEMUTAR...' : hasSpun ? 'HADIAH SUDAH DIAMBIL' : 'PUTAR SEKARANG'}
+                                {isSpinning ? 'MEMUTAR...' : hasSpun ? 'SUDAH MENGAMBIL HADIAH' : 'PUTAR SEKARANG'}
                             </button>
+                            {hasSpun && !isSpinning && (
+                                <p className="mt-4 text-[9px] tracking-widest text-[#f3e5ab]/40 uppercase">
+                                    Hadiah terbatas 1x per perangkat.
+                                </p>
+                            )}
                         </div>
                     </main>
 
-                    {/* FOOTER */}
-                    <footer className="w-full py-16 px-6 mt-14 border-t border-white/5 flex flex-col items-center">
+                    {/* FOOTER SECTION */}
+                    <footer className="w-full py-16 px-6 mt-12 border-t border-white/5 flex flex-col items-center">
                         <div className="flex justify-center items-center gap-6 md:gap-12 mb-10">
                             <div className="w-5 h-5 border-[1px] border-white/40 rounded-full"></div>
                             <span className="text-[10px] font-medium uppercase tracking-[0.2em] opacity-80">Gucci Osteria</span>
                             <span className="text-[10px] font-medium uppercase tracking-[0.2em] opacity-80">Palazzo</span>
                             <span className="text-[10px] font-medium uppercase tracking-[0.2em] opacity-80">Gucci</span>
                         </div>
-                        <p className="text-[9px] tracking-[0.15em] text-white/30 uppercase text-center leading-loose px-6">
+                        <p className="text-[9px] tracking-[0.15em] text-white/30 uppercase text-center leading-loose max-w-xs">
                             © 2016 - 2026 GUCCIO GUCCI S.P.A. - ALL RIGHT RESERVED.<br/>
                             SIAE LICENCE# 2294/1/1938
                         </p>
                     </footer>
 
-                    {/* NOTIFIKASI POP-UP */}
+                    {/* MODAL POP-UP HADIAH */}
                     {showModal && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center px-6">
                             <div className="absolute inset-0 bg-black/95 backdrop-blur-md"></div>
-                            <div className="modal-animate relative w-full max-w-sm bg-[#2b0609] border-[1px] border-[#d4af37] p-12 text-center shadow-[0_0_80px_rgba(212,175,55,0.2)]">
+                            <div className="modal-animate relative w-full max-w-sm bg-[#2b0609] border-[1px] border-[#d4af37] p-12 text-center shadow-2xl">
                                 <div className="text-4xl mb-6">🏆</div>
                                 <h3 className="text-white tracking-[0.3em] text-[11px] uppercase opacity-50 mb-3">Selamat! Anda Berhasil</h3>
                                 <h2 className="font-serif text-5xl text-[#f3e5ab] font-bold mb-10 tracking-tight">{prizeResult}</h2>
